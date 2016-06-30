@@ -1085,6 +1085,18 @@ function! fzf#vim#complete(...)
   return ''
 endfunction
 
+function! fzf#vim#sift(args, ...)
+  let root = split(system('git rev-parse --show-toplevel'), '\n')[0]
+  if v:shell_error
+      let root = '.'
+  endif
+  return s:fzf(fzf#vim#wrap({
+    \ 'source':  'sift --targets'.a:args,
+    \ 'dir':     root,
+    \ 'options': '-m --prompt "> "'
+    \}), a:000)
+endfunction
+
 " ------------------------------------------------------------------
 let &cpo = s:cpo_save
 unlet s:cpo_save
